@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Challenge Quiz Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6347;
+            margin-bottom: 20px;
+        }
+        .challenge {
+            font-size: 20px;
+            color: #4682b4;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2e8b57;
+        }
+        .answer {
+            padding: 12px;
+            font-size: 16px;
+            width: 80%;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+        .button {
+            background-color: #4682b4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #5f9ea0;
+        }
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .invalid {
+            color: #ff4500;
+        }
+        .correct {
+            color: #32cd32;
+        }
+        .incorrect {
+            color: #ff4500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="timer" class="timer">Time left: <span id="time">20</span> seconds</div>
+
+        <div id="challenge" class="challenge">Do 20 jumping jacks before proceeding to the next challenge!</div>
+
+        <div id="question" class="question" style="display:none;"></div>
+
+        <input type="text" id="answer" class="answer" placeholder="Your answer (a, b, or c)" style="display:none;">
+        <button id="submit" class="button" style="display:none;">Submit Answer</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        let timeLeft = 20;
+        let timer;
+
+        // Start the 20-second timer
+        function startTimer() {
+            document.getElementById('challenge').textContent = "Do 20 jumping jacks before proceeding to the next challenge!";
+            timer = setInterval(function() {
+                timeLeft--;
+                document.getElementById('time').textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showQuestion(); // Show the question after the timer finishes
+                }
+            }, 1000);
+        }
+
+        // Display the question after the timer finishes
+        function showQuestion() {
+            document.getElementById('challenge').textContent = "Great job! Now, answer this question:";
+
+            // Show the question with options
+            document.getElementById('question').style.display = "inline-block";
+            document.getElementById('question').innerHTML = "What part of the body did they numb?<br>a. Legs<br>b. Hands<br>c. Head";
+
+            // Show the answer input and submit button
+            document.getElementById('answer').style.display = "inline-block";
+            document.getElementById('submit').style.display = "inline-block";
+        }
+
+        // Handle answer submission
+        document.getElementById('submit').addEventListener('click', function() {
+            const userAnswer = document.getElementById('answer').value.trim().toLowerCase();
+
+            if (userAnswer === 'a' || userAnswer === 'b' || userAnswer === 'c') {
+                if (userAnswer === 'a') {
+                    document.getElementById('result').textContent = "Correct! Proceed to The next QR.";
+                    document.getElementById('result').className = 'result correct';
+                } else if (userAnswer === 'b') {
+                    document.getElementById('result').textContent = "Incorrect. They didn't numb the hands.";
+                    document.getElementById('result').className = 'result incorrect';
+                } else if (userAnswer === 'c') {
+                    document.getElementById('result').textContent = "Incorrect. They didn't numb the head.";
+                    document.getElementById('result').className = 'result incorrect';
+                }
+            } else {
+                document.getElementById('result').textContent = "Invalid answer. Please choose 'a', 'b', or 'c'.";
+                document.getElementById('result').className = 'result invalid';
+            }
+        });
+
+        // Start the game when the page loads
+        window.onload = function() {
+            startTimer();
+        };
+    </script>
+
+</body>
+</html>
